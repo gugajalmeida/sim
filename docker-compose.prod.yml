@@ -7,6 +7,9 @@ services:
 
     image: ghcr.io/simstudioai/simstudio:${SIM_VERSION:-latest}
 
+    networks:
+      - sim_network
+      
     restart: unless-stopped
 
     deploy:
@@ -91,6 +94,9 @@ services:
 
     image: ghcr.io/simstudioai/realtime:${SIM_VERSION:-latest}
 
+    networks:
+      - sim_network
+      
     restart: unless-stopped
 
     deploy:
@@ -136,6 +142,9 @@ services:
   migrations:
     image: ghcr.io/simstudioai/migrations:${SIM_VERSION:-latest}
 
+    networks:
+      - sim_network
+      
     working_dir: /app/packages/db
 
     environment:
@@ -156,6 +165,9 @@ services:
   redis:
     image: redis:7-alpine
 
+    networks:
+      - sim_network
+      
     restart: unless-stopped
 
     healthcheck:
@@ -172,6 +184,9 @@ services:
   cron:
     image: ghcr.io/simstudioai/cron:${SIM_CRON_VERSION:-latest}
 
+    networks:
+      - sim_network
+      
     restart: on-failure
 
     environment:
@@ -186,6 +201,9 @@ services:
 
   db:
     image: pgvector/pgvector:pg17
+
+    networks:
+      - sim_network
 
     restart: unless-stopped
 
@@ -211,3 +229,7 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+  sim_network:
+    driver: bridge
